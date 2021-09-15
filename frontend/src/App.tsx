@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Route } from 'react-router';
 import axios from 'axios';
-import { sortBy, prop } from 'ramda';
 
 import { Header } from './components';
 import { Home, Cart } from './pages';
@@ -11,7 +10,7 @@ import { onSave } from './store/pizzaSlice';
 import IPizzaProps from './types/PizzaProps';
 
 // const URL = 'http://localhost:3000/db.json';
-const URL = 'http://localhost:8000/api/pizzas/';
+const URL = 'http://localhost:8000/api/pizzas/?ordering=';
 const props = ['rating', 'price', 'name'];
 
 function App() {
@@ -21,13 +20,9 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    axios.get(URL).then(({ data }: { data: IPizzaProps[] }) => {
+    axios.get(URL + props[sortType]).then(({ data }: { data: IPizzaProps[] }) => {
       if (data) {
-        const sorted: IPizzaProps[] = sortBy(prop(props[sortType]))(data);
-        if (sortType === 0) {
-          sorted.reverse();
-        }
-        setPizzas(sorted);
+        setPizzas(data);
         dispatch(onSave(data));
       }
     });

@@ -1,31 +1,22 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { filter, length, map, pipe, prop, propEq, sum } from 'ramda';
 import { createSelector } from 'reselect';
 
 import IPizzaProps from '../types/PizzaProps';
 
 export interface PizzaState {
-  selected: { id: number; price: number; type: number; size: number }[];
+  selected: SelectedPizza[];
   pizzas: IPizzaProps[];
 }
 
-const initialState: PizzaState = {
-  selected: [],
-  pizzas: [],
-};
-
 export const pizzaSlice = createSlice({
   name: 'pizza',
-  initialState,
+  initialState: {
+    selected: [],
+    pizzas: [],
+  },
   reducers: {
-    onPizzaSelect: (
-      state: PizzaState,
-      action: PayloadAction<{
-        id: number;
-        price: number;
-        type: number;
-        size: number;
-      }>,
-    ) => {
+    onPizzaSelect: (state: PizzaState, action: PayloadAction<SelectedPizza>) => {
       state.selected.push(action.payload);
     },
     onSave: (state: PizzaState, action: PayloadAction<IPizzaProps[]>) => {
@@ -37,18 +28,18 @@ export const pizzaSlice = createSlice({
 export const { onPizzaSelect, onSave } = pizzaSlice.actions;
 export default pizzaSlice.reducer;
 
-export const priceSelector = createSelector(
-  (state: { pizza: PizzaState }) => state.pizza.selected,
-  (selected) => selected.reduce((a, b) => a + b.price, 0),
-);
+const selectedPizzasSelector = (state: any) => state.pizza.selected;
 
-export const pizzaCountSelector = createSelector(
-  (state: { pizza: PizzaState }) => state.pizza.selected,
-  (selected) => selected.length,
-);
+export const priceSelector = createSelector(selectedPizzasSelector, pipe(map(prop('price')), sum));
+
+export const pizzaCountSelector = createSelector(selectedPizzasSelector, length);
 
 export const countClickSelector = (id: number) =>
-  createSelector(
-    (state: { pizza: PizzaState }) => state.pizza.selected,
-    (selected) => selected.filter((pizza) => pizza.id === id).length,
-  );
+  createSelector(selectedPizzasSelector, pipe(filter(propEq('id', id)), length as any));
+
+type SelectedPizza = {
+  id: number;
+  price: number;
+  type: number;
+  size: number;
+};
