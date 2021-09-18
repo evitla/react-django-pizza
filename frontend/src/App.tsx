@@ -6,23 +6,23 @@ import axios from 'axios';
 import { Header } from './components';
 import { Home, Cart } from './pages';
 import { activeItemSelector } from './store/sortingSlice';
-import { onSave } from './store/pizzaSlice';
+import { filteredPizzasSelector, onSave } from './store/pizzaSlice';
 import IPizzaProps from './types/PizzaProps';
 
-// const URL = 'http://localhost:3000/db.json';
-const URL = 'http://localhost:8000/api/pizzas/?ordering=';
+const BASE_URL = 'http://localhost:8000/api/pizzas/';
+const SORT_URL = BASE_URL + '?ordering=';
 const props = ['rating', 'price', 'name'];
 
 function App() {
   const sortType = useSelector(activeItemSelector);
-  const [pizzas, setPizzas] = useState<IPizzaProps[]>([]);
+  // const [pizzas, setPizzas] = useState<IPizzaProps[]>([]);
+  const pizzas = useSelector(filteredPizzasSelector);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    axios.get(URL + props[sortType]).then(({ data }: { data: IPizzaProps[] }) => {
+    axios.get(SORT_URL + props[sortType]).then(({ data }: { data: IPizzaProps[] }) => {
       if (data) {
-        setPizzas(data);
         dispatch(onSave(data));
       }
     });

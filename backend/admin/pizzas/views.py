@@ -1,6 +1,6 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from rest_framework.filters import OrderingFilter
+from rest_framework.filters import SearchFilter, OrderingFilter
 
 from .models import Pizza
 from .serializers import PizzaSerializer
@@ -9,7 +9,8 @@ from .serializers import PizzaSerializer
 class PizzaViewSet(viewsets.ModelViewSet):
     queryset = Pizza.objects.all()
     serializer_class = PizzaSerializer
-    filter_backends = (OrderingFilter,)
+    filter_backends = (SearchFilter, OrderingFilter)
+    search_fields = ['category']
     ordering_fields = ['name', 'price', 'rating']
 
     def list(self, request):

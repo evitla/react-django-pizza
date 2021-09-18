@@ -37,6 +37,16 @@ export const pizzaCountSelector = createSelector(selectedPizzasSelector, length)
 export const countClickSelector = (id: number) =>
   createSelector(selectedPizzasSelector, pipe(filter(propEq('id', id)), length as any));
 
+export const filteredPizzasSelector = createSelector(
+  (state: any) => state.pizza.pizzas,
+  (state: any) => state.categories.selected,
+  (pizzas: any, selectedCategory: any) => {
+    // 'all' category denoted as ''
+    if (typeof selectedCategory.index === 'string') return pizzas;
+    return filter(propEq('category', selectedCategory.index))(pizzas);
+  },
+);
+
 type SelectedPizza = {
   id: number;
   price: number;
