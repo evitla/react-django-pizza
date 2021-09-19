@@ -28,7 +28,7 @@ export const pizzaSlice = createSlice({
 export const { onPizzaSelect, onSave } = pizzaSlice.actions;
 export default pizzaSlice.reducer;
 
-const selectedPizzasSelector = (state: any) => state.pizza.selected;
+export const selectedPizzasSelector = (state: any) => state.pizza.selected;
 
 export const priceSelector = createSelector(selectedPizzasSelector, pipe(map(prop('price')), sum));
 
@@ -49,6 +49,8 @@ export const filteredPizzasSelector = createSelector(
 
 type SelectedPizza = {
   id: number;
+  name: string;
+  imageUrl: string;
   price: number;
   type: number;
   size: number;

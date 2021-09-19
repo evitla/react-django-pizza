@@ -22,7 +22,7 @@ function Header() {
           </div>
         </div>
       </Link>
-      <Route exact path="/">
+      <Route path="/">
         <Cart count={totalCount} price={totalPrice} link="/cart.html" />
       </Route>
     </Container>

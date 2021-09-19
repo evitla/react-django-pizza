@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import Button from '../Button';
-import CartIcon from './CartIcon';
+import { CartIcon } from '../icons';
 
 const Cart = ({ count, price, currency = '₽', link }: ICart) => (
   <div className="header__cart">
