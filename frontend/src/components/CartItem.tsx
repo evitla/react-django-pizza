@@ -1,7 +1,7 @@
 import React from 'react';
 import { Plus } from './icons';
 
-const CartItem = ({ name, type, size, imageUrl, price }: any) => {
+const CartItem = ({ name, type, size, imageUrl, price, count }: any) => {
   return (
     <div className="cart__item">
       <div className="cart__item-img">
@@ -17,13 +17,13 @@ const CartItem = ({ name, type, size, imageUrl, price }: any) => {
         <div className="button button--outline button--circle cart__item-count-minus">
           <Plus />
         </div>
-        <b>1</b>
+        <b>{count}</b>
         <div className="button button--outline button--circle cart__item-count-plus">
           <Plus />
         </div>
       </div>
       <div className="cart__item-price">
-        <b>{price} ₽</b>
+        <b>{price * count} ₽</b>
       </div>
       <div className="cart__item-remove">
         <div className="button button--outline button--circle">

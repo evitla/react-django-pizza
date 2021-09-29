@@ -1,6 +1,5 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { equals } from 'ramda';
 
 import CartItem from '../components/CartItem';
 import { priceSelector, selectedPizzasSelector } from '../store/pizzaSlice';
@@ -10,6 +9,7 @@ import { CartIcon, Trash, GreyArrowLeft } from '../components/icons';
 const Cart = () => {
   let selectedPizzas = useSelector(selectedPizzasSelector);
   const pizzasPrice = useSelector(priceSelector);
+  console.log(selectedPizzas);
 
   return (
     <div className="container container--cart">
@@ -32,6 +32,7 @@ const Cart = () => {
               imageUrl={pizza.imageUrl}
               size={pizza.size}
               price={pizza.price}
+              count={pizza.count}
             />
           ))}
         </div>
