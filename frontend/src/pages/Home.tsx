@@ -1,7 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { Categories, PizzaBlock, SortPopup } from '../components';
+import { Categories, SortPopup } from '../components/Filters';
+import { PizzaBlock } from '../components';
 import { optionsSelector, activeItemSelector } from '../store/categoriesSlice';
 
 import IPizzaProps from '../types/PizzaProps';

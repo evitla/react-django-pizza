@@ -1,15 +1,15 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import CartItem from '../components/CartItem';
-import { priceSelector, selectedPizzasSelector } from '../store/pizzaSlice';
+import { onClearCard, priceSelector, selectedPizzasSelector } from '../store/pizzaSlice';
 
 import { CartIcon, Trash, GreyArrowLeft } from '../components/icons';
 
 const Cart = () => {
   let selectedPizzas = useSelector(selectedPizzasSelector);
   const pizzasPrice = useSelector(priceSelector);
-  console.log(selectedPizzas);
+  const dispatch = useDispatch();
 
   return (
     <div className="container container--cart">
@@ -19,7 +19,7 @@ const Cart = () => {
             <CartIcon />
             Корзина
           </h2>
-          <div className="cart__clear">
+          <div className="cart__clear" onClick={() => dispatch(onClearCard())}>
             <Trash />
             <span>Очистить корзину</span>
           </div>
@@ -39,7 +39,7 @@ const Cart = () => {
         <div className="cart__bottom">
           <div className="cart__bottom-details">
             <span>
-              Всего пицц: <b>{selectedPizzas.length} шт.</b>
+              Всего пицц: <b>{selectedPizzas.reduce((a: number, b: any) => a + b.count, 0)} шт.</b>
             </span>
             <span>
               Сумма заказа: <b>{pizzasPrice} ₽</b>

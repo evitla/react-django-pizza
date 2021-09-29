@@ -36,10 +36,13 @@ export const pizzaSlice = createSlice({
     onSave: (state: PizzaState, action: PayloadAction<IPizzaProps[]>) => {
       state.pizzas = action.payload;
     },
+    onClearCard: (state: PizzaState) => {
+      state.selected = [];
+    },
   },
 });
 
-export const { onPizzaSelect, onSave } = pizzaSlice.actions;
+export const { onPizzaSelect, onSave, onClearCard } = pizzaSlice.actions;
 export default pizzaSlice.reducer;
 
 // let result = Object.values(
@@ -74,7 +77,7 @@ export const filteredPizzasSelector = createSelector(
   (state: any) => state.categories.selected,
   (pizzas: any, selectedCategory: any) => {
     // 'all' category denoted as ''
-    if (typeof selectedCategory.index === 'string') return pizzas;
+    if (selectedCategory.index === 0) return pizzas;
     return filter(propEq('category', selectedCategory.index))(pizzas);
   },
 );
