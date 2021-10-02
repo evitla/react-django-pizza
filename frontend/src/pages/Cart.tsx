@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import CartItem from '../components/CartItem';
 import { onClearCard, priceSelector, selectedPizzasSelector } from '../store/pizzaSlice';
@@ -27,6 +28,7 @@ const Cart = () => {
         <div className="content__items">
           {selectedPizzas.map((pizza: any) => (
             <CartItem
+              id={pizza.id}
               name={pizza.name}
               type={pizza.type}
               imageUrl={pizza.imageUrl}
@@ -46,10 +48,10 @@ const Cart = () => {
             </span>
           </div>
           <div className="cart__bottom-buttons">
-            <a href="/" className="button button--outline button--add go-back-btn">
+            <Link to="/" className="button button--outline button--add go-back-btn">
               <GreyArrowLeft />
               <span>Вернуться назад</span>
-            </a>
+            </Link>
             <div className="button pay-btn">
               <span>Оплатить сейчас</span>
             </div>

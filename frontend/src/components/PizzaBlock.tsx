@@ -42,6 +42,7 @@ const PizzaBlock = ({ name, imageUrl, price, types, sizes, id }: IPizzaProps) =>
                 price,
                 type: activeType,
                 size: activeSize,
+                count: 0,
               }),
             )
           }

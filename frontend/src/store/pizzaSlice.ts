@@ -1,6 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
+  and,
   filter,
+  findIndex,
   groupBy,
   join,
   length,
@@ -15,6 +17,7 @@ import {
   values,
 } from 'ramda';
 import { createSelector } from 'reselect';
+import { RootState } from '.';
 
 import IPizzaProps from '../types/PizzaProps';
 
@@ -31,7 +34,14 @@ export const pizzaSlice = createSlice({
   },
   reducers: {
     onPizzaSelect: (state: PizzaState, action: PayloadAction<SelectedPizza>) => {
-      state.selected.push({ ...action.payload, count: 1 });
+      const { id, type, size } = action.payload;
+      const foundIndex = state.selected.findIndex(
+        (p: SelectedPizza) => p.id === id && p.type === type && p.size === size,
+      );
+      if (foundIndex === -1) state.selected.push({ ...action.payload, count: 1 });
+      else {
+        state.selected[foundIndex].count += 1;
+      }
     },
     onSave: (state: PizzaState, action: PayloadAction<IPizzaProps[]>) => {
       state.pizzas = action.payload;
@@ -39,37 +49,56 @@ export const pizzaSlice = createSlice({
     onClearCard: (state: PizzaState) => {
       state.selected = [];
     },
+    onDecrement: (
+      state: PizzaState,
+      { payload: { id, types, sizes } }: PayloadAction<Pick<IPizzaProps, 'id' | 'types' | 'sizes'>>,
+    ) => {
+      const foundIndex = state.selected.findIndex(
+        (p: any) => p.id === id && p.type === types && p.size === sizes,
+      );
+      state.selected[foundIndex].count -= 1;
+    },
+    onIncrement: (
+      state: PizzaState,
+      { payload: { id, types, sizes } }: PayloadAction<Pick<IPizzaProps, 'id' | 'types' | 'sizes'>>,
+    ) => {
+      const foundIndex = state.selected.findIndex(
+        (p: any) => p.id === id && p.type === types && p.size === sizes,
+      );
+      state.selected[foundIndex].count += 1;
+    },
+    onDelete: (
+      state: PizzaState,
+      { payload: { id, types, sizes } }: PayloadAction<Pick<IPizzaProps, 'id' | 'types' | 'sizes'>>,
+    ) => {
+      const foundIndex = state.selected.findIndex(
+        (p: any) => p.id === id && p.type === types && p.size === sizes,
+      );
+      state.selected.splice(foundIndex, 1);
+    },
   },
 });
 
-export const { onPizzaSelect, onSave, onClearCard } = pizzaSlice.actions;
+export const { onPizzaSelect, onSave, onClearCard, onDecrement, onIncrement, onDelete } =
+  pizzaSlice.actions;
 export default pizzaSlice.reducer;
 
-// let result = Object.values(
-//   state.pizza.selected.reduce((a: any, c: any) => {
-//     let key = `${c.id}~~${c.type}~~${c.size}`;
-//     if (a[key]) a[key].count += c.count;
-//     else a[key] = Object.assign({}, c);
-//     return a;
-//   }, {}),
-// );
-const mergeCount = mergeWithKey((key, left, right) => (key === 'count' ? left + right : left));
-const groupKey = pipe((props as any)(['id', 'type', 'size']), join('~~'));
-const make = pipe((groupBy as any)(groupKey), map(reduce(mergeCount, {})), values);
-
-export const selectedPizzasSelector = (state: any) => (make as any)(state.pizza.selected);
+export const selectedPizzasSelector = (state: any) => state.pizza.selected;
 
 export const priceSelector = createSelector(
-  (state: any) => state.pizza.selected,
-  pipe(map(prop('price')), sum),
+  selectedPizzasSelector,
+  pipe(reduce((a, p: any) => a + p.price * p.count, 0)),
 );
 
-export const pizzaCountSelector = createSelector((state: any) => state.pizza.selected, length);
+export const pizzaCountSelector = createSelector(
+  selectedPizzasSelector,
+  pipe(map(prop('count')) as any, sum),
+);
 
 export const countClickSelector = (id: number) =>
   createSelector(
-    (state: any) => state.pizza.selected,
-    pipe(filter(propEq('id', id)), length as any),
+    (state: RootState) => state.pizza.selected,
+    pipe(filter(propEq('id', id)), map(prop('count')) as any, sum),
   );
 
 export const filteredPizzasSelector = createSelector(
@@ -89,5 +118,5 @@ type SelectedPizza = {
   price: number;
   type: number;
   size: number;
-  count?: number;
+  count: number;
 };
