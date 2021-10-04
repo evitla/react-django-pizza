@@ -30,9 +30,9 @@ const Cart = () => {
             <CartItem
               id={pizza.id}
               name={pizza.name}
-              type={pizza.type}
+              types={pizza.types}
               imageUrl={pizza.imageUrl}
-              size={pizza.size}
+              sizes={pizza.sizes}
               price={pizza.price}
               count={pizza.count}
             />

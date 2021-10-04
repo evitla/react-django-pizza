@@ -1,21 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {
-  and,
-  filter,
-  findIndex,
-  groupBy,
-  join,
-  length,
-  map,
-  mergeWithKey,
-  pipe,
-  prop,
-  propEq,
-  props,
-  reduce,
-  sum,
-  values,
-} from 'ramda';
+import { filter, map, pipe, prop, propEq, reduce, sum } from 'ramda';
 import { createSelector } from 'reselect';
 import { RootState } from '.';
 
@@ -34,9 +18,9 @@ export const pizzaSlice = createSlice({
   },
   reducers: {
     onPizzaSelect: (state: PizzaState, action: PayloadAction<SelectedPizza>) => {
-      const { id, type, size } = action.payload;
+      const { id, types, sizes } = action.payload;
       const foundIndex = state.selected.findIndex(
-        (p: SelectedPizza) => p.id === id && p.type === type && p.size === size,
+        (p: SelectedPizza) => p.id === id && p.types === types && p.sizes === sizes,
       );
       if (foundIndex === -1) state.selected.push({ ...action.payload, count: 1 });
       else {
@@ -54,7 +38,7 @@ export const pizzaSlice = createSlice({
       { payload: { id, types, sizes } }: PayloadAction<Pick<IPizzaProps, 'id' | 'types' | 'sizes'>>,
     ) => {
       const foundIndex = state.selected.findIndex(
-        (p: any) => p.id === id && p.type === types && p.size === sizes,
+        (p: any) => p.id === id && p.types === types && p.sizes === sizes,
       );
       state.selected[foundIndex].count -= 1;
     },
@@ -63,7 +47,7 @@ export const pizzaSlice = createSlice({
       { payload: { id, types, sizes } }: PayloadAction<Pick<IPizzaProps, 'id' | 'types' | 'sizes'>>,
     ) => {
       const foundIndex = state.selected.findIndex(
-        (p: any) => p.id === id && p.type === types && p.size === sizes,
+        (p: any) => p.id === id && p.types === types && p.sizes === sizes,
       );
       state.selected[foundIndex].count += 1;
     },
@@ -72,7 +56,7 @@ export const pizzaSlice = createSlice({
       { payload: { id, types, sizes } }: PayloadAction<Pick<IPizzaProps, 'id' | 'types' | 'sizes'>>,
     ) => {
       const foundIndex = state.selected.findIndex(
-        (p: any) => p.id === id && p.type === types && p.size === sizes,
+        (p: any) => p.id === id && p.types === types && p.sizes === sizes,
       );
       state.selected.splice(foundIndex, 1);
     },
@@ -116,7 +100,7 @@ type SelectedPizza = {
   name: string;
   imageUrl: string;
   price: number;
-  type: number;
-  size: number;
+  types: number;
+  sizes: number;
   count: number;
 };
