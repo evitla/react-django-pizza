@@ -10,6 +10,7 @@ import { activeItemSelector } from './store/sortingSlice';
 import { optionsSelector } from './store/categoriesSlice';
 import { filteredPizzasSelector, onSave } from './store/pizzaSlice';
 import { getPizzas } from './api';
+import LoadingBlock from './components/PizzaBlock/LoadingBlock';
 
 function App() {
   const dispatch = useDispatch();
@@ -37,7 +38,12 @@ function App() {
               <SortPopup items={['популярности', 'цене', 'алфавиту']} />
             </div>
           </div>
-          {pizzas.length > 0 ? <Home items={pizzas} /> : <span>Loading...</span>}
+          <div className="container">
+            <h2 className="content__title">Все пиццы</h2>
+            <div className="content__items">
+              {pizzas.length > 0 ? <Home items={pizzas} /> : <LoadingBlock />}
+            </div>
+          </div>
         </Route>
         <Route exact path="/cart" component={Cart} />
       </div>
