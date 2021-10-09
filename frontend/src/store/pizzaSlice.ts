@@ -100,7 +100,7 @@ type SelectedPizza = {
   name: string;
   imageUrl: string;
   price: number;
-  types: number;
-  sizes: number;
+  types: 0 | 1;
+  sizes: 0 | 1 | 2;
   count: number;
 };

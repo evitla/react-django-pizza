@@ -15,7 +15,7 @@ export const categoriesSlice = createSlice({
     options: CATEGORIES,
   },
   reducers: {
-    onSelect: (state, action: PayloadAction<{ index: number; item: CategoryType }>) => {
+    onSelect: (state, action: PayloadAction<{ index: number; item: CategoryType | string }>) => {
       state.selected.index = action.payload.index;
       state.selected.item = action.payload.item;
     },

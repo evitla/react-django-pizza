@@ -8,12 +8,12 @@ import { onSort, activeItemSelector } from '../../store/sortingSlice';
 const SortPopup = ({ items }: { items: string[] }) => {
   const dispatch = useDispatch();
 
+  const sortRef = useRef<HTMLDivElement>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  useClickAway(sortRef, setIsOpen);
+
   const activeItem = useSelector(activeItemSelector);
   const activeLabel = items[activeItem];
-
-  const [isOpen, setIsOpen] = useState(false);
-  const sortRef: any = useRef();
-  useClickAway(sortRef, setIsOpen);
 
   return (
     <div ref={sortRef} className="sort">

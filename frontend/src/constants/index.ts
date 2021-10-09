@@ -9,3 +9,5 @@ export const CATEGORIES: CategoryType[] = [
   'Острые',
   'Закрытые',
 ];
+export const pizzaTypes = ['тонкое', 'традиционное'];
+export const pizzaSizes: [26, 30, 40] = [26, 30, 40];

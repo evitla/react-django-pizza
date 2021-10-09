@@ -1,20 +1,16 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import Category from './Category';
 import { onSelect, CategoryType } from '../../store/categoriesSlice';
+
+import Category from './Category';
 
 const Categories = ({ items }: { items: CategoryType[] }) => {
   const dispatch = useDispatch();
 
   const [active, setActive] = useState(0);
 
-  const handleSelectAll = () => {
-    setActive(0);
-    dispatch(onSelect({ item: '', index: 0 }));
-  };
-
-  const handleSelect = (item: CategoryType, index: number) => {
+  const handleSelect = (item: CategoryType | string = '', index: number = 0) => {
     setActive(index);
     dispatch(onSelect({ item, index }));
   };
@@ -22,7 +18,7 @@ const Categories = ({ items }: { items: CategoryType[] }) => {
   return (
     <div className="categories">
       <ul>
-        <Category active={active === 0} item="Все" onSelect={handleSelectAll} />
+        <Category active={active === 0} item="Все" onSelect={handleSelect} />
 
         {items.map((item, index) => (
           <Category
